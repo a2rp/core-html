@@ -1,0 +1,91 @@
+/* App-wide minimal defaults (component styles live with styled-components) */
+
+/* Import tokens */
+@import "./styles/theme.css";
+
+/* Root stacking/containers */
+#root {
+    isolation: isolate; /* avoid z-index leaks from portals, etc. */
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Links */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--border);
+}
+
+/* Buttons */
+button {
+    font: inherit;
+    color: inherit;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+button:focus-visible {
+    outline: var(--focus-ring);
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+    font: inherit;
+    color: inherit;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: var(--focus-ring);
+}
+
+/* Code blocks (plain) */
+code,
+pre,
+kbd,
+samp {
+    font-family: Consolas, Monaco, "SFMono-Regular", Menlo, monospace;
+}
+pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    overflow: auto;
+}
+
+/* Utility: visually-hidden (a11y) */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}
+
+/* Utility: container scrolling with stable scrollbar */
+.scroll-area {
+    overflow: auto;
+}
+.scroll-area.hover {
+    /* opt-in to the stable look defined in theme.css */
+    composes: hover-scrollbar-stable from "./styles/theme.css";
+}
+
+/* Smooth transitions for theme flips (doesn't affect Monaco) */
+body,
+#root {
+    transition: background-color 0.2s ease, color 0.2s ease,
+        border-color 0.2s ease;
+}
