@@ -1,5 +1,7 @@
 # Core HTML — Interactive Notes & Demos
 
+![alt text](image.png)
+
 Semantic, accessible, and production-friendly HTML patterns with runnable demos (Monaco), topic-wise navigation, and skip-to-content UX.
 
 ## Live
