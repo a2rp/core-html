@@ -20,7 +20,9 @@ function getInitialTheme() {
     try {
         const saved = localStorage.getItem(THEME_KEY)
         if (saved === "light" || saved === "dark") return saved
-    } catch { }
+    } catch {
+        // Browser storage may be unavailable.
+    }
     if (typeof window !== "undefined" && window.matchMedia) {
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
     }
@@ -31,7 +33,9 @@ function getInitialNavOpen() {
     try {
         const saved = localStorage.getItem(NAV_OPEN_KEY)
         if (saved === "true" || saved === "false") return saved === "true"
-    } catch { }
+    } catch {
+        // Browser storage may be unavailable.
+    }
     if (typeof window !== "undefined") {
         return window.innerWidth >= 1000
     }
@@ -43,12 +47,16 @@ const App = () => {
     const [theme, setTheme] = useState(getInitialTheme)
 
     useEffect(() => {
-        try { localStorage.setItem(NAV_OPEN_KEY, String(displayNav)) } catch { }
+        try { localStorage.setItem(NAV_OPEN_KEY, String(displayNav)) } catch {
+            // Browser storage may be unavailable.
+        }
     }, [displayNav])
 
     useEffect(() => {
         document.documentElement.setAttribute("data-theme", theme)
-        try { localStorage.setItem(THEME_KEY, theme) } catch { }
+        try { localStorage.setItem(THEME_KEY, theme) } catch {
+            // Browser storage may be unavailable.
+        }
     }, [theme])
 
     useEffect(() => {
@@ -74,6 +82,12 @@ const App = () => {
                     <Styled.NavLinkWrapper onClick={handleDisplayNav} title="Toggle sidebar">
                         <MdMenuOpen size={20} />
                     </Styled.NavLinkWrapper>
+                    <img
+                        className="brandLogo"
+                        src={`${import.meta.env.BASE_URL}logo.png`}
+                        alt=""
+                        aria-hidden="true"
+                    />
                     <NavLink to="/" title="Core HTML">Core HTML</NavLink>
                 </Styled.LogoLinkWrapper>
 

@@ -61,7 +61,9 @@ export default function HtmlPlayground({ storageKey, initialHtml }) {
         try {
             const saved = localStorage.getItem(storageKey);
             if (typeof saved === "string" && saved.length) return saved;
-        } catch { }
+        } catch {
+            // Browser storage may be unavailable.
+        }
         return initialHtml;
     });
 
@@ -72,7 +74,9 @@ export default function HtmlPlayground({ storageKey, initialHtml }) {
 
     // Persist on change
     useEffect(() => {
-        try { localStorage.setItem(storageKey, code); } catch { }
+        try { localStorage.setItem(storageKey, code); } catch {
+            // Browser storage may be unavailable.
+        }
     }, [code, storageKey]);
 
     // Debounced preview
@@ -91,7 +95,9 @@ export default function HtmlPlayground({ storageKey, initialHtml }) {
         setConfirmOpen(false);
         setCode(initialHtml);
         setHtml(initialHtml);
-        try { localStorage.setItem(storageKey, initialHtml); } catch { }
+        try { localStorage.setItem(storageKey, initialHtml); } catch {
+            // Browser storage may be unavailable.
+        }
     }, [initialHtml, storageKey]);
 
     const handleCopy = useCallback(async () => {

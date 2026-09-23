@@ -59,14 +59,16 @@ const NavListCore = () => {
             return "";
         }
     });
-    const [matchCount, setMatchCount] = useState(0);
+    const [, setMatchCount] = useState(0);
 
     // persistent topic expansion state
     const [open, setOpen] = useState(() => {
         try {
             const saved = JSON.parse(localStorage.getItem(OPEN_KEY) || "null");
             if (saved && typeof saved === "object") return saved;
-        } catch { }
+        } catch {
+            // Browser storage may be unavailable.
+        }
         return {
             foundations: true, // default on first visit
             documentSkeleton: false,
@@ -95,7 +97,9 @@ const NavListCore = () => {
         setOpen(next);
         try {
             localStorage.setItem(OPEN_KEY, JSON.stringify(next));
-        } catch { }
+        } catch {
+            // Browser storage may be unavailable.
+        }
     };
 
     const toggle = (key) => saveOpen({ ...open, [key]: !open[key] });
@@ -347,7 +351,9 @@ const NavListCore = () => {
     useEffect(() => {
         try {
             sessionStorage.setItem(STORAGE_KEY, search);
-        } catch { }
+        } catch {
+            // Browser storage may be unavailable.
+        }
 
         const root = wrapperRef.current;
         if (!root) return;

@@ -1,3 +1,4 @@
+/* global __APP_COMMIT_ISO__, __APP_BUILD_ISO__ */
 import React from 'react'
 import { Col1, Col2, Row, Styled } from './styled'
 import { FaFacebook, FaGithub, FaLinkedin, FaPhoneAlt, FaUser, FaYoutube } from 'react-icons/fa'

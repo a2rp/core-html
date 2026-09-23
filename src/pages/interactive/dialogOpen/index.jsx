@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Styled } from "./styled";
 import { NavLink } from "react-router-dom";
 import HtmlPlayground from "../../../components/monaco/htmlPlayground";
@@ -142,7 +142,6 @@ const STARTER_HTML = String.raw`<!doctype html>
 </html>`;
 
 export default function DialogOpen() {
-    const liveDialogRef = useRef(null);
 
     useEffect(() => {
         document.title = "Interactive · <dialog> (open attr) — basics";

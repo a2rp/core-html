@@ -84,7 +84,9 @@ export default function DirBasics() {
         if (old && (old === "undefined" || old === null || old === "")) {
             localStorage.removeItem(OLD_KEY);
         }
-    } catch { }
+    } catch {
+        // Browser storage may be unavailable.
+    }
 
     return (
         <Styled.Page>
@@ -126,7 +128,9 @@ export default function DirBasics() {
                         <button
                             className="copyBtn"
                             onClick={async () => {
-                                try { await navigator.clipboard.writeText(preset.code); } catch { }
+                                 try { await navigator.clipboard.writeText(preset.code); } catch {
+                                     // Clipboard access may be unavailable.
+                                 }
                             }}
                             title="Copy preset code"
                             aria-label="Copy preset code"

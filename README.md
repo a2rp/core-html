@@ -1,56 +1,44 @@
-# Core HTML — Interactive Notes & Demos
+# Core HTML Interactive Notes
 
-![alt text](image.png)
+A React and Vite learning workspace for semantic HTML, accessibility patterns, metadata, forms, media, navigation, and practical browser demos.
 
-Semantic, accessible, and production-friendly HTML patterns with runnable demos (Monaco), topic-wise navigation, and skip-to-content UX.
+![Core HTML Interactive Notes screenshot](screenshot.png)
 
-## Live
+## Features
 
--   **GitHub Repo:** https://github.com/a2rp/core-html
--   **GitHub Pages:** https://a2rp.github.io/core-html/
+- Topic-based navigation with expandable sections
+- Searchable demo menu with keyboard shortcuts
+- Runnable HTML examples and interactive playgrounds
+- Accessible navigation, focus handling, and skip-link patterns
+- Dark and light theme support
+- Responsive fixed header and independent navigation scrolling
 
-## Clone
+## Tech stack
+
+- React
+- Vite
+- React Router
+- styled-components
+- Material UI and Monaco Editor
+- React Icons
+
+## Run locally
 
 ```bash
-git clone https://github.com/a2rp/core-html.git
-cd core-html
-```
-
-Quick Start
-
-```bash
-# install
-npm i
-
-# dev
+npm install
 npm run dev
-
-# build & preview
-npm run build
-npm run preview
 ```
 
-## Author
+Build and deploy to GitHub Pages with:
 
-Ashish Ranjan, Full-Stack Web Developer
-
-- Portfolio: [ashishranjan.net](https://www.ashishranjan.net/)
-- GitHub: [a2rp](https://github.com/a2rp)
-- CodePen: [ash1198](https://codepen.io/ash1198)
-- LinkedIn: [aashishranjan](https://www.linkedin.com/in/aashishranjan)
-- Facebook: [theash.ashish](https://www.facebook.com/theash.ashish/)
-- YouTube: [Ashish Ranjan](https://www.youtube.com/@ashishranjan-ashz?sub_confirmation=1)
-- Email: [ash.ranjan09@gmail.com](mailto:ash.ranjan09@gmail.com)
-
-## Support
-
-- [Support page](https://a2rp-donation-page.netlify.app/)
-- [Buy Me a Coffee](https://buymeacoffee.com/a2rp)
-- [Patreon](https://www.patreon.com/a2rp)
+```bash
+npm run build
+npm run deploy
+```
 
 ## Links
 
-- Portfolio: [https://www.ashishranjan.net](https://www.ashishranjan.net)
+- Portfolio: [https://www.ashishranjan.net/](https://www.ashishranjan.net/)
 - GitHub: [https://github.com/a2rp](https://github.com/a2rp)
 - CodePen: [https://codepen.io/ash1198](https://codepen.io/ash1198)
 - LinkedIn: [https://www.linkedin.com/in/aashishranjan](https://www.linkedin.com/in/aashishranjan)
@@ -61,5 +49,5 @@ Ashish Ranjan, Full-Stack Web Developer
 ## Support
 
 - Support: [https://a2rp-donation-page.netlify.app/](https://a2rp-donation-page.netlify.app/)
-- Buy Me A Coffee: [https://buymeacoffee.com/a2rp](https://buymeacoffee.com/a2rp)
-- Patreon: [https://patreon.com/a2rp](https://patreon.com/a2rp)
+- Buy Me a Coffee: [https://buymeacoffee.com/a2rp](https://buymeacoffee.com/a2rp)
+- Patreon: [https://www.patreon.com/a2rp](https://www.patreon.com/a2rp)

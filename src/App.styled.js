@@ -80,6 +80,16 @@ const LogoLinkWrapper = styled.div`
     align-items: center;
     gap: 30px;
 
+    .brandLogo {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--card);
+        padding: 4px;
+    }
+
     a {
         display: flex;
         align-items: center;
