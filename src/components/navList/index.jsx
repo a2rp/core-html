@@ -8,7 +8,7 @@ const OPEN_KEY = "navOpenCore";
 
 /* ────────────────────────────────────────────────────────────────────────── */
 /* Collapsible: measures content height for smooth max-height transitions     */
-function Collapsible({ expanded, children }) {
+function Collapsible({ expanded, children, id }) {
     const innerRef = useRef(null);
     const [h, setH] = useState(0);
 
@@ -24,6 +24,7 @@ function Collapsible({ expanded, children }) {
     return (
         <div
             className="collapsible"
+            id={id}
             style={{ "--h": `${expanded ? h : 0}px` }}
             aria-hidden={!expanded}
         >
@@ -433,15 +434,15 @@ const NavListCore = () => {
                     aria-controls="navlinksWrapper"
                 />
                 {search.trim().length > 0 && (
-                    <div
+                    <button
                         className="clearIconWrapper"
                         onClick={clearSearch}
-                        role="button"
                         aria-label="Clear search"
                         title="Clear"
+                        type="button"
                     >
                         <MdClear size={20} />
-                    </div>
+                    </button>
                 )}
             </div>
 
@@ -456,31 +457,25 @@ const NavListCore = () => {
                     const expanded = isSearching ? matchSections.has(sec.key) : !!open[sec.key];
                     return (
                         <div className="section" key={sec.key}>
-                            <h3
-                                className="title"
-                                data-key={sec.key}
-                                role="button"
-                                tabIndex={0}
-                                aria-expanded={expanded}
-                                onClick={() => {
-                                    // Only toggle expansion; DO NOT center on parent toggle
-                                    toggle(sec.key);
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" || e.key === " ") {
-                                        e.preventDefault();
+                            <h3 className="title" data-key={sec.key}>
+                                <button
+                                    aria-controls={`nav-section-${sec.key}`}
+                                    aria-expanded={expanded}
+                                    onClick={() => {
+                                        // Only toggle expansion; DO NOT center on parent toggle
                                         toggle(sec.key);
-                                    }
-                                }}
-                                title={sec.title}
-                            >
-                                <span className="caret" data-open={expanded ? "true" : "false"} aria-hidden="true">
-                                    ▸
-                                </span>
-                                {sec.title}
+                                    }}
+                                    title={sec.title}
+                                    type="button"
+                                >
+                                    <span className="caret" data-open={expanded ? "true" : "false"} aria-hidden="true">
+                                        ▸
+                                    </span>
+                                    {sec.title}
+                                </button>
                             </h3>
 
-                            <Collapsible expanded={expanded}>
+                            <Collapsible expanded={expanded} id={`nav-section-${sec.key}`}>
                                 <ul className="subList" role="list">
                                     {sec.items.map((it) => (
                                         <li key={it.to}>
@@ -488,6 +483,7 @@ const NavListCore = () => {
                                                 to={it.to}
                                                 title={it.title}
                                                 data-sec={sec.key}
+                                                tabIndex={expanded ? undefined : -1}
                                                 onClick={() => {
                                                     // Center on actual navigation to a subtopic
                                                     centerActive(true);

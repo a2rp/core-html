@@ -110,7 +110,7 @@ const LogoLinkWrapper = styled.div`
     }
 `;
 
-const NavLinkWrapper = styled.div`
+const NavLinkWrapper = styled.button`
     border: 1px solid var(--border);
     background: var(--card);
     color: var(--text);
@@ -121,6 +121,7 @@ const NavLinkWrapper = styled.div`
     display: grid;
     place-items: center;
     box-shadow: var(--shadow-sm);
+    padding: 0;
 
     &:focus-visible {
         outline: var(--focus-ring);
@@ -164,10 +165,12 @@ const NavWrapper = styled.div`
     background: var(--surface);
     color: var(--text);
     position: relative;
+    visibility: hidden;
 
     &.active {
         flex: 0 0 250px;
         width: 250px;
+        visibility: visible;
     }
 
     @media (width < 1000px) {

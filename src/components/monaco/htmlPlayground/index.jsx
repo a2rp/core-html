@@ -14,11 +14,30 @@ function ConfirmDialog({ open, title = "Reset", desc = "Reset to the lesson star
     useEffect(() => {
         if (open) {
             lastActiveRef.current = document.activeElement;
-            // Focus first focusable (Confirm)
-            const btn = dialogRef.current?.querySelector("button.confirm");
+            // Keep focus on the safe action until the user chooses to reset.
+            const btn = dialogRef.current?.querySelector("[data-dialog-safe]");
             btn?.focus();
             const onKey = (e) => {
-                if (e.key === "Escape") onCancel?.();
+                if (e.key === "Escape") {
+                    e.preventDefault();
+                    onCancel?.();
+                    return;
+                }
+                if (e.key !== "Tab" || !dialogRef.current) return;
+                const controls = [...dialogRef.current.querySelectorAll("button:not([disabled]), a[href]")]
+                    .filter((element) => element.getClientRects().length);
+                if (!controls.length) return;
+                const activeIndex = controls.indexOf(document.activeElement);
+                if (activeIndex === -1) {
+                    e.preventDefault();
+                    (e.shiftKey ? controls[controls.length - 1] : controls[0]).focus();
+                } else if (e.shiftKey && activeIndex === 0) {
+                    e.preventDefault();
+                    controls[controls.length - 1].focus();
+                } else if (!e.shiftKey && activeIndex === controls.length - 1) {
+                    e.preventDefault();
+                    controls[0].focus();
+                }
             };
             window.addEventListener("keydown", onKey);
             return () => window.removeEventListener("keydown", onKey);
@@ -44,10 +63,10 @@ function ConfirmDialog({ open, title = "Reset", desc = "Reset to the lesson star
                 <h3 id="confirm-title">{title}</h3>
                 <p id="confirm-desc">{desc}</p>
                 <div className="modalBtns">
-                    <button className="btn danger confirm" onClick={onConfirm}>
+                    <button className="btn danger confirm" onClick={onConfirm} type="button">
                         Reset
                     </button>
-                    <button className="btn" onClick={onCancel}>
+                    <button className="btn" data-dialog-safe="true" onClick={onCancel} type="button">
                         Cancel
                     </button>
                 </div>

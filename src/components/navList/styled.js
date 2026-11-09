@@ -30,15 +30,25 @@ export const Styled = {
             font-weight: 600;
             line-height: 1;
             color: var(--text);
+            white-space: nowrap;
+        }
+
+        .title button {
             display: flex;
             align-items: center;
             gap: 6px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            line-height: inherit;
+            text-align: left;
             cursor: pointer;
             user-select: none;
-            outline: none;
-            white-space: nowrap;
         }
-        .title:focus-visible {
+
+        .title button:focus-visible {
             outline: 2px solid var(--primary);
             outline-offset: 2px;
             border-radius: 8px;
@@ -81,6 +91,9 @@ export const Styled = {
                 justify-content: center;
                 cursor: pointer;
                 color: var(--text-muted);
+                border: 0;
+                padding: 0;
+                background: transparent;
             }
             .clearIconWrapper:hover {
                 color: var(--text);

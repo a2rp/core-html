@@ -63,7 +63,12 @@ const App = () => {
         const mq = window.matchMedia?.("(prefers-color-scheme: dark)")
         if (!mq) return
         const handler = (e) => {
-            const saved = localStorage.getItem(THEME_KEY)
+            let saved = null
+            try {
+                saved = localStorage.getItem(THEME_KEY)
+            } catch {
+                // Browser storage may be unavailable.
+            }
             if (saved !== "light" && saved !== "dark") {
                 setTheme(e.matches ? "dark" : "light")
             }
@@ -79,7 +84,14 @@ const App = () => {
         <Styled.Wrapper>
             <Styled.Header>
                 <Styled.LogoLinkWrapper>
-                    <Styled.NavLinkWrapper onClick={handleDisplayNav} title="Toggle sidebar">
+                    <Styled.NavLinkWrapper
+                        aria-controls="core-navigation"
+                        aria-expanded={displayNav}
+                        aria-label="Toggle sidebar"
+                        onClick={handleDisplayNav}
+                        title="Toggle sidebar"
+                        type="button"
+                    >
                         <MdMenuOpen size={20} />
                     </Styled.NavLinkWrapper>
                     <img
@@ -104,7 +116,7 @@ const App = () => {
             </Styled.Header>
 
             <Styled.Main>
-                <Styled.NavWrapper className={`${displayNav ? "active" : ""}`}>
+                <Styled.NavWrapper aria-hidden={!displayNav} className={`${displayNav ? "active" : ""}`} id="core-navigation">
                     <div className="navInner">
                         <NavList />
                     </div>
