@@ -6,9 +6,9 @@ import { NavLink } from "react-router-dom";
 /**
  * target & rel safety for <a>
  * - target basics: _self, _blank, _parent, _top
- * - Why _blank is risky (reverse tabnabbing via window.opener)
+ * - Modern target="_blank" behavior and explicit opener access
  * - rel="noopener" (prevents window.opener)
- * - rel="noreferrer" (also hides referrer; implies noopener in most browsers)
+ * - rel="noreferrer" (omits the referrer and also implies noopener)
  * - Contextual rel tokens: external, ugc, sponsored
  * - JS equivalents: window.open(url, "_blank", "noopener,noreferrer")
  * - Progressive patterns and audit checklist
@@ -44,16 +44,21 @@ const STARTER_HTML = String.raw`<!doctype html>
     <main class="grid">
       <header>
         <h1>Opening links safely: <code>target</code> & <code>rel</code></h1>
-        <p class="muted">Use <code>target="_blank"</code> only when needed—and always pair it with the right <code>rel</code> tokens.</p>
+        <p class="muted">Use <code>target="_blank"</code> only when needed. Learn its modern opener default, explicit opener access, and the privacy effects of <code>rel</code>.</p>
       </header>
 
-      <section class="card bad">
-        <h2>Risky pattern <small class="k">reverse tabnabbing</small></h2>
-        <p>Opening a new tab without the right <code>rel</code> can give the new page a handle to your page via <code>window.opener</code>.</p>
+      <section class="card good">
+        <h2>Modern default: <code>target="_blank"</code></h2>
+        <p>Modern browsers implicitly apply <code>noopener</code> to <code>target="_blank"</code>. Adding it explicitly documents intent and covers older clients.</p>
         <div class="ex">
-          <a class="btn" href="https://example.com" target="_blank">Opens new tab (⚠ unsafe)</a>
-          <p class="small">Without <code>rel="noopener"</code>, the opened page can try <code>window.opener.location = '...'</code>.</p>
+          <a class="btn" href="https://example.com" target="_blank" rel="noopener">Opens with explicit opener protection</a>
         </div>
+      </section>
+
+      <section class="card bad">
+        <h2>Explicitly allowing opener <small class="k">avoid for untrusted links</small></h2>
+        <p><code>rel="opener"</code> opts in to giving the new page a reference to its opener. A hostile page could try to navigate that page.</p>
+        <div class="ex"><a class="btn" href="https://example.com" target="_blank" rel="opener">Opens with opener access</a></div>
       </section>
 
       <section class="card good">
@@ -66,7 +71,7 @@ const STARTER_HTML = String.raw`<!doctype html>
 
       <section class="card">
         <h2>Privacy add-on: <code>rel="noreferrer"</code></h2>
-        <p>Also omits the HTTP <em>Referer</em> header on navigation. Many browsers treat <code>noreferrer</code> as also implying <code>noopener</code>.</p>
+        <p>Omits the HTTP <em>Referer</em> header on navigation and also implies <code>noopener</code>.</p>
         <div class="ex">
           <a class="btn" href="https://web.dev/" target="_blank" rel="noreferrer">web.dev (no referrer)</a>
           <p class="small">Use when you don't want to leak the source page, or your policy requires it.</p>
@@ -94,9 +99,8 @@ const STARTER_HTML = String.raw`<!doctype html>
         <h2>JS equivalent: open safely</h2>
         <div class="ex">
 <pre><code>// Prefer rel on &lt;a&gt;, but if you must use JS:
-const win = window.open("https://example.com", "_blank", "noopener,noreferrer");
-// As a belt-and-suspenders fallback:
-if (win) { win.opener = null; }</code></pre>
+window.open("https://example.com", "_blank", "noopener,noreferrer");
+// With noopener, window.open returns null rather than the new window.</code></pre>
         </div>
       </section>
 
@@ -104,7 +108,7 @@ if (win) { win.opener = null; }</code></pre>
         <h2>Checklist</h2>
         <ul>
           <li>Only use <code>target="_blank"</code> when it truly helps the user.</li>
-          <li>Add <code>rel="noopener"</code> at minimum. Often use <code>rel="noopener noreferrer"</code>.</li>
+          <li>Use explicit <code>rel="noopener"</code> for compatibility and clear intent. Add <code>noreferrer</code> only when you also want to omit the HTTP referrer.</li>
           <li>Mark context with <code>rel="ugc"</code> and/or <code>rel="sponsored"</code> when applicable.</li>
           <li>Avoid JS <code>window.open</code> unless necessary; prefer semantic anchors.</li>
         </ul>
@@ -132,8 +136,9 @@ if (win) { win.opener = null; }</code></pre>
 <pre><code>// Console snippet: flag anchors missing rel safety
 [...document.querySelectorAll('a[target="_blank"]')].forEach(a => {
   const rel = (a.getAttribute('rel') || '').toLowerCase();
-  if (!/noopener/.test(rel) && !/noreferrer/.test(rel)) {
-    console.warn('Missing rel safety:', a);
+  if (rel.split(/\s+/).includes('opener')) console.warn('Explicit opener access:', a);
+  else if (!/noopener/.test(rel) && !/noreferrer/.test(rel)) {
+    console.info('No explicit rel policy (implicit noopener applies in modern browsers):', a);
   }
 });</code></pre>
       </section>
@@ -183,12 +188,12 @@ export default function TargetRelSafety() {
             </section>
 
             <section id="risk">
-                <h2>Why <code>_blank</code> can be risky</h2>
+                <h2>When opener access is risky</h2>
                 <div className="card">
                     <p>
-                        When you open a new tab, the new page may receive a reference to your page via <code>window.opener</code>. A hostile page could attempt to navigate your page (reverse tabnabbing).
+                        Modern browsers implicitly apply <code>noopener</code> to <code>target="_blank"</code>. Older browsers, or a link that explicitly uses <code>rel="opener"</code>, can expose <code>window.opener</code> and let a hostile page try to navigate the original page.
                     </p>
-                    <p className="note">Mitigation: add <code>rel="noopener"</code> or <code>rel="noreferrer"</code> on the link.</p>
+                    <p className="note">Use explicit <code>rel="noopener"</code> for compatibility and clarity. <code>noreferrer</code> also implies <code>noopener</code> while omitting the HTTP referrer.</p>
                 </div>
             </section>
 
@@ -199,7 +204,7 @@ export default function TargetRelSafety() {
                         <h3>Security & privacy</h3>
                         <ul className="bullets">
                             <li><strong>noopener</strong>: blocks <code>window.opener</code> in the new tab.</li>
-                            <li><strong>noreferrer</strong>: don’t send the HTTP referrer (and commonly blocks opener as well).</li>
+                            <li><strong>noreferrer</strong>: omit the HTTP referrer and also prevent <code>window.opener</code>.</li>
                         </ul>
                     </div>
                     <div className="card">
@@ -222,8 +227,8 @@ export default function TargetRelSafety() {
                 <h2>JavaScript equivalents</h2>
                 <Styled.Code aria-label="JS open safely">
                     <pre>{String.raw`// If you must use JS:
-const win = window.open("https://example.com", "_blank", "noopener,noreferrer");
-if (win) win.opener = null; // extra hardening`}</pre>
+window.open("https://example.com", "_blank", "noopener,noreferrer");
+// With noopener, window.open returns null rather than the new window.`}</pre>
                 </Styled.Code>
             </section>
 
@@ -233,7 +238,8 @@ if (win) win.opener = null; // extra hardening`}</pre>
                     <pre>{String.raw`// In DevTools console:
 [...document.querySelectorAll('a[target="_blank"]')].forEach(a => {
   const rel = (a.getAttribute('rel') || '').toLowerCase();
-  if (!/noopener|noreferrer/.test(rel)) console.warn('Needs rel safety:', a);
+  if (rel.split(/\s+/).includes('opener')) console.warn('Explicit opener access:', a);
+  else if (!/noopener|noreferrer/.test(rel)) console.info('No explicit rel policy; modern browsers implicitly apply noopener:', a);
 });`}</pre>
                 </Styled.Code>
             </section>
@@ -241,7 +247,7 @@ if (win) win.opener = null; // extra hardening`}</pre>
             <section id="play">
                 <h2>Try it live</h2>
                 <p className="lede">
-                    Fix unsafe <code>_blank</code> links, add the right <code>rel</code> tokens, and compare behaviors. Autosaves to this lesson.
+                    Compare implicit and explicit opener protection, then try the privacy effect of <code>noreferrer</code>. Autosaves to this lesson.
                 </p>
                 <HtmlPlayground
                     storageKey="core-html:links:target-rel-safety:v1"

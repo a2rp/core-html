@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Styled } from "./styled";
 import { MdClear } from "react-icons/md";
 
@@ -20,6 +20,10 @@ function Collapsible({ expanded, children, id }) {
         setH(el.scrollHeight);
         return () => ro.disconnect();
     }, []);
+
+    useLayoutEffect(() => {
+        if (innerRef.current) innerRef.current.inert = !expanded;
+    }, [expanded]);
 
     return (
         <div

@@ -47,7 +47,7 @@ const STARTER_HTML = String.raw`<!doctype html>
         <input id="email" type="email" placeholder="name@example.com" required />
         <a href="#target">Go to target</a>
       </div>
-      <p class="muted">Screen readers get name (label/placeholder fallback), role (button/link/textbox), and state (<code>required</code>, <code>aria-pressed</code>) for free.</p>
+      <p class="muted">The associated label gives the email input its accessible name; placeholder text is only a hint. Native controls also expose their role and state.</p>
     </section>
 
     <section class="card bad">
